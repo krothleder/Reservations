@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Reservations</title>
+    <!-- Link to Bootstrap CSS -->
+     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+      <script src="https://code.jquery.com/jquery.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="jumbotron">
+      <h1 class="text-center"><span class="glyphicon glyphicon-fire"></span> Hot Restaurant</h1>
+      <hr>
+      <h2 class="text-center">We only have 5 tables! Book your seat before they all are gone!</h2>
+      <br>
+
+     <div class="text-center">
+        <a href="/tables"><button type="button" class="btn btn-lg btn-primary"><span class="glyphicon glyphicon-list-alt"></span> View Tables</button></a>
+        <a href="/reserve"><button type="button" class="btn btn-lg btn-danger"><span class="glyphicon glyphicon-credit-card"></span> Make Reservation</button></a>
+      </div>
+    </div>
+
+
+    <div class = 'row panel panel-primary'>
+      <div class = 'panel-heading'>
+        <h3>Make A Reservation</h3>
+      </div>
+      <form action="">
+        <strong style ='margin:10px'>Name:</strong> <input id = "name-input" type="text"  style = 'width: 80%; margin: 10px'><br>
+        <strong style ='margin:10px'>Email:</strong> <input id = "email-input" type="text"  style = 'width: 80%; margin: 10px'><br>
+        <strong style ='margin:10px'>Phone Number:</strong> <input id = "phone-input" type="text" style = 'width: 80%; margin: 10px'><br>
+        <strong style ='margin:10px'>Unique ID:</strong> <input id = "id-input" type="text"  style = 'width: 80%; margin: 10px'><br>
+        <input class = "btn-primary" id = 'add-user' type="submit" value="Submit">
+      </form>
+    </div>
+  </div>
+</div>
+
+  <script type="text/javascript">
+    $("#add-user").on('click', function(event){
+      event.preventDefault();
+      var newReservation = {
+        name: $("#name-input").val().trim(),
+        email: $("#email-input").val().trim(),
+        phone: $("#phone-input").val().trim(),
+        id: $("#id-input").val().trim()
+      };
+
+      $.post("/api/tables", newReservation)
+      .done(function(data){
+        console.log(data);
+        alert("Reservation added")
+      });
+
+
+    });
+  </script>
+
+
+  </body>
+</html>
