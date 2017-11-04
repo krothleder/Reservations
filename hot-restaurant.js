@@ -48,18 +48,35 @@ app.get("/tables", function(req, res) {
   res.sendFile(path.join(__dirname, "view.html"));
 });
 
-app.get("/reservation", function(req, res) {
+app.get("/reserve", function(req, res) {
   res.sendFile(path.join(__dirname, "resvervation.html"));
 });
 
 // Get all tables
 app.get("/api/tables", function(req, res) {
-  res.json(tables);
+  res.json(reservations);
 });
 
 // Get all waitlist
 app.get("/api/waitlist", function(req, res) {
-  res.json(waitlist);
+	for (i=1;i<reservations.length;i++){
+		res.json(reservations[i]);
+	}
+});
+
+
+
+// Create New Reservation - takes in JSON input
+app.post("/api/tables", function(req, res) {
+  // req.body hosts is equal to the JSON post sent from the user
+  // This works because of our body-parser middleware
+  var newReservation = req.body;
+  
+  console.log(newReservation);
+
+  reservations.push(newReservation);
+
+  res.json(reservations);
 });
 
 

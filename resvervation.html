@@ -3,10 +3,10 @@
   <head>
     <meta charset="utf-8">
     <title>Reservations</title>
-    <!-- Reset CSS -->
-     <link rel="stylesheet" type="text/css" href="reset.css">
     <!-- Link to Bootstrap CSS -->
      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+      <script src="https://code.jquery.com/jquery.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
   </head>
   <body>
     <div class="container">
@@ -37,6 +37,26 @@
     </div>
   </div>
 </div>
+
+  <script type="text/javascript">
+    $("#add-user").on('click', function(event){
+      event.preventDefault();
+      var newReservation = {
+        name: $("#name-input").val().trim(),
+        email: $("#email-input").val().trim(),
+        phone: $("#phone-input").val().trim(),
+        id: $("#id-input").val().trim()
+      };
+
+      $.post("/api/tables", newReservation)
+      .done(function(data){
+        console.log(data);
+        alert("Reservation added")
+      });
+
+
+    });
+  </script>
 
 
   </body>
