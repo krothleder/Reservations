@@ -3,18 +3,28 @@
 var express = require("express");
 var bodyParser = require("body-parser");
 var path = require("path");
-
+var mysql = require("mysql");
 
 // Sets up the Express App
 // =============================================================
 var app = express();
 var PORT = process.env.PORT || 3000;
 
+var connection = mysql.createConnection({
+  host: "localhost",
+  port: 3306,
+
+  // Your username
+  user: "root",
+
+  // Your password
+  password: "",
+  database: "restaurants_db"
+});
 
 // Sets up the Express app to handle data parsing
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-
 
 // Reservations
 // =============================================================
@@ -34,7 +44,6 @@ var reservations = [
     uniqueID: "kak"
   }
 ];
-
 
 // Routes
 // =============================================================
@@ -59,33 +68,45 @@ app.get("/api/tables", function(req, res) {
 
 // Get all waitlist
 app.get("/api/waitlist", function(req, res) {
-	for (i=1;i<reservations.length;i++){
-		res.json(reservations[i]);
-	}
+  for (i = 1; i < reservations.length; i++) {
+    res.json(reservations[i]);
+  }
 });
-
-
 
 // Create New Reservation - takes in JSON input
 app.post("/api/tables", function(req, res) {
-  // req.body hosts is equal to the JSON post sent from the user
+  // req.body hosts is equal to nthe JSON post sent from the user
   // This works because of our body-parser middleware
   var newReservation = req.body;
-  
+
   console.log(newReservation);
 
   reservations.push(newReservation);
 
+  connection.query(
+    "INSERT INTO reservations SET ?",
+    [
+      {
+        person_name: newReservation.name,
+        email: newReservation.email,
+        phone: newReservation.phone,
+        unique_id: newReservation.id
+      }
+    ],
+    function(err, res) {
+      if (err) throw err;
+      // Log all results of the SELECT statement
+      //console.log("hello");
+
+      console.log(res);
+    }
+  );
+
   res.json(reservations);
 });
-
 
 // Starts the server to begin listening
 // =============================================================
 app.listen(PORT, function() {
   console.log("App listening on PORT " + PORT);
 });
-
-
-
-
